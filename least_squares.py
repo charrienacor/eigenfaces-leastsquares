@@ -246,7 +246,7 @@ ax3.plot(x_fit_curve, y_fit_curve, color='black', linestyle='dashed', linewidth=
 ax3.set_xlim(0, 20)
 ax3.set_ylim(0, 20)
 
-ax3.set_title(f'Levenberg-Marquardt Polar Fit\nType: {conic_type_nonlinear}')
+ax3.set_title(f'(c) Levenberg-Marquardt Polar Fit\nType: {conic_type_nonlinear}')
 ax3.set_xlabel('X (AU)')
 ax3.set_ylabel('Y (AU)')
 ax3.legend()
