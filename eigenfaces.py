@@ -68,7 +68,7 @@ def plot_eigenfaces(VT, num_faces=36):
     plt.show()
 
 def plot_dimensionality_reduction(X, VT):
-    k = 2  
+    k = 2 
     
     print(f"Projecting {X.shape[1]} dimensions to {k} dimensions...")
     
@@ -264,7 +264,7 @@ def analyze_component_variance(S):
     ratio_two_pca   = explained_var_ratio[0] + explained_var_ratio[1]
     ratio_three_pca = explained_var_ratio[0] + explained_var_ratio[1] + explained_var_ratio[2]
     
-    print(f"\nExplaining variance using principal components...")
+    print(f"\nCapturing variance using principal components...")
     print(f"Variance captured by PC 1: {r1:.4f}%")
     print(f"Variance captured by PC 2: {r2:.4f}%")
     print(f"Variance captured by PC 3: {r3:.4f}%")
