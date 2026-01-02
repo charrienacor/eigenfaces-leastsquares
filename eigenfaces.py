@@ -63,7 +63,6 @@ def plot_eigenfaces(VT, num_faces=36):
     plt.figure(figsize=(6, 6))
     plt.imshow(canvas, cmap='gray')
     plt.axis('off')
-    plt.suptitle('First 36 Eigenfaces', fontsize=16)
     plt.subplots_adjust(top=0.92) 
     plt.show()
 
@@ -79,7 +78,7 @@ def plot_dimensionality_reduction(X, VT):
     Z = np.dot(X, V_k.T)
     
     plt.figure(figsize=(10, 8))
-    plt.scatter(Z[:, 0], Z[:, 1], alpha=0.5, s=10, label='Face Samples', color='blue')
+    plt.scatter(Z[:, 0], Z[:, 1], alpha=0.5, s=10, label='Face Samples', color='black')
     plt.title('Dimensionality Reduction, 1024 to 2 dimensions', fontsize=16)
     plt.xlabel('Principal Component 1 (Max Variance)', fontsize=12)
     plt.ylabel('Principal Component 2 (Second Max Variance)', fontsize=12)
@@ -247,7 +246,7 @@ def analyze_component_variance(S):
     limit = 50 
     
     plt.figure(figsize=(12, 6))
-    plt.bar(x[:limit], explained_var_ratio[:limit] * 100, color='blue', label='Individual Variance')
+    plt.bar(x[:limit], explained_var_ratio[:limit] * 100, color='dimgray', label='Individual Variance')
     plt.plot(x[:limit], explained_var_ratio[:limit] * 100, color='black', linestyle='-', linewidth=2, markersize=4, label='Trend Line')
     plt.title('Percentage of Explained Variance by Principal Component', fontsize=16)
     plt.xlabel('Principal Component', fontsize=12)
@@ -296,7 +295,7 @@ def plot_pairwise_principal_components(X, VT, n_components=5, n_clusters=4):
             ax = axes[i, j]
             
             # Diagonal plots (e.g., PC1 vs PC1) will be straight lines
-            scatter = ax.scatter(Z[:, j], Z[:, i], c=labels, cmap='viridis', alpha=0.5, s=10)
+            scatter = ax.scatter(Z[:, j], Z[:, i], c=labels, cmap='bone', vmin=0, vmax=labels.max() + 2, alpha=0.5, s=10)
             ax.grid(True, linestyle='--', alpha=0.3)
             
             if i == n_components - 1:
