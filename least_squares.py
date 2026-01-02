@@ -180,19 +180,16 @@ print(f"e (eccentricity):      {e_fit:.4f}")
 print(f"theta0 (rotation):     {theta0_fit:.4f} rad ({np.degrees(theta0_fit):.2f} deg)")
 
 # 3. Comparison
-# Linear SSE: sum((Ax - b)^2)
-sse_ne = np.sum((np.dot(A_linear, theta_normal) - Y_target)**2)
-sse_qr = np.sum((np.dot(A_linear, theta_qr) - Y_target)**2)
-
-# Nonlinear SSE: LM uses 0.5 * sum(r^2) inside the loop, so we multiply by 2 to match the SSE for linear
-sse_lm_std = sse_lm * 2
+# Least squares objective function, min SSE: 0.5 sum((A theta - y)^2)
+sse_ne = 0.5 * np.sum((np.dot(A_linear, theta_normal) - Y_target)**2)
+sse_qr = 0.5 * np.sum((np.dot(A_linear, theta_qr) - Y_target)**2)
 
 print("\n" + "="*70)
 print(f"{'Method':<25}  {'Time (ms)':<12}  {'SSE (Sum of Squared Errors)':<25}")
 print("=" * 70)
 print(f"{'Normal Equations':<25}  {time_normal*1000:<12.4f}  {sse_ne:.6f}")
 print(f"{'QR Decomposition':<25}  {time_qr*1000:<12.4f}  {sse_qr:.6f}")
-print(f"{'Levenberg-Marquardt':<25}  {time_lm*1000:<12.4f}  {sse_lm_std:.6f}")
+print(f"{'Levenberg-Marquardt':<25}  {time_lm*1000:<12.4f}  {sse_lm:.6f}")
 print("="*70)
 
 # Plotting
