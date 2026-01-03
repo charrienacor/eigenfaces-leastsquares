@@ -87,8 +87,12 @@ def solve_levenberg_marquardt(theta_obs, r_obs, init_params, max_iter=500, tol=1
     mu = 0.01
     nu = 10.0
     
+    # Store SSE for each iteration
+    sse_history = []  
+    
     r_res = polar_conic_residuals(params, theta_obs, r_obs)
     current_sse = 0.5 * np.sum(r_res**2)
+    sse_history.append(current_sse)
     
     print("\nFitting using Levenberg-Marquardt algorithm...")
     
@@ -103,18 +107,18 @@ def solve_levenberg_marquardt(theta_obs, r_obs, init_params, max_iter=500, tol=1
         
         delta = np.linalg.solve(Hessian_lm, -gradient_sse)
         
-        # Stopping condition: check if delta is smaller than tolerance
-        # delta = ||theta_new - theta||
         if np.linalg.norm(delta) < tol:
-            print(f"Converged at Iteration {i}: Parameter step size {np.linalg.norm(delta):.8f}")
             params = params + delta
+            r_res = polar_conic_residuals(params, theta_obs, r_obs)
+            current_sse = 0.5 * np.sum(r_res**2)
+            sse_history.append(current_sse)
+            print(f"Converged at Iteration {i}: Parameter step size {np.linalg.norm(delta):.8f}")
             break
             
         params_new = params + delta
         r_res_new = polar_conic_residuals(params_new, theta_obs, r_obs)
         new_sse = 0.5 * np.sum(r_res_new**2)
         
-        # The damping coefficient, mu, is reduced when the SSE is lower
         if new_sse < current_sse:
             params = params_new 
             current_sse = new_sse
@@ -123,10 +127,13 @@ def solve_levenberg_marquardt(theta_obs, r_obs, init_params, max_iter=500, tol=1
         else:
             mu *= nu
             print(f"Iteration {i}: SSE = {current_sse:.6f}, mu = {mu:.8f}")
+        
+        sse_history.append(current_sse)
+    
     else:
-        print(f"Reached maximum iterations (Iteration {max_iter}) without convergence.")
+        print(f"Reached maximum iterations ({max_iter}) without convergence.")
                 
-    return params, current_sse
+    return params, current_sse, sse_history
 
 # Execution
 # 1. Linear Regression
@@ -164,7 +171,7 @@ r_obs, theta_obs = get_polar_coords(X_data, Y_data)
 init_params = np.array([10.0, 1.0, 0.0])
 
 start_time = time.time()
-params_nonlinear, sse_lm = solve_levenberg_marquardt(theta_obs, r_obs, init_params)
+params_nonlinear, sse_lm, sse_history = solve_levenberg_marquardt(theta_obs, r_obs, init_params)
 time_lm = time.time() - start_time
 
 # Nonlinear parameters
@@ -275,4 +282,14 @@ ax3.text(0.05, 0.05, eq_text_nonlinear, transform=ax3.transAxes,
          bbox=dict(facecolor='white', alpha=0.8, edgecolor='gray'), fontsize=11)
 
 plt.tight_layout()
+plt.show()
+
+
+# Plot Iterations vs SSE
+plt.figure(figsize=(8, 5))
+plt.plot(range(len(sse_history)), sse_history, color='black')
+plt.title('Levenberg-Marquardt: Iterations vs SSE')
+plt.xlabel('Iteration')
+plt.ylabel('SSE')
+plt.grid(True)
 plt.show()
