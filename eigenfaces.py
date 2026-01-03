@@ -43,7 +43,7 @@ def plot_eigenfaces(VT, num_faces=36):
     d = 32 # Image dimension, 32x32
     n = int(np.ceil(np.sqrt(num_faces))) # Grid dimension, 6x6
     
-    # Create a black canvas
+    # Create a blank canvas
     canvas = np.zeros((n * d, n * d))
     
     for i in range(num_faces):
@@ -346,4 +346,5 @@ if __name__ == "__main__":
 
     print("\nPCA using top components...")
     
+
     plot_pairwise_principal_components(X, VT, n_components=5, n_clusters=4)
